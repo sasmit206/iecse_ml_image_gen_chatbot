@@ -6,9 +6,6 @@ import time
 from PIL import Image
 from urllib.parse import quote
 
-# --------------------------------------------------
-# PAGE CONFIG
-# --------------------------------------------------
 st.set_page_config(
     page_title="AI Art Studio",
     page_icon="🎨",
@@ -21,9 +18,6 @@ st.markdown(
     "(rate-limited, shared infrastructure)."
 )
 
-# --------------------------------------------------
-# SESSION STATE INIT
-# --------------------------------------------------
 defaults = {
     "last_gen_time": 0,
     "last_image": None,
@@ -39,9 +33,6 @@ for k, v in defaults.items():
 
 COOLDOWN_SECONDS = 10
 
-# --------------------------------------------------
-# SIDEBAR (FORM + STATE)
-# --------------------------------------------------
 with st.sidebar.form("settings_form"):
     st.header("⚙️ Settings")
 
@@ -84,9 +75,6 @@ if apply:
 style = st.session_state.style
 model = st.session_state.model
 
-# --------------------------------------------------
-# PROMPT INPUT
-# --------------------------------------------------
 prompt = st.text_area(
     "Describe your image:",
     height=100,
@@ -95,9 +83,6 @@ prompt = st.text_area(
 
 st.caption(f"Active style: **{style}**")
 
-# --------------------------------------------------
-# STYLE MODIFIERS
-# --------------------------------------------------
 style_map = {
     "Cyberpunk": (
         ", cyberpunk, neon lights, futuristic city, dark atmosphere, "
@@ -132,19 +117,12 @@ style_map = {
     "No Style": ""
 }
 
-
-# --------------------------------------------------
-# IMAGE FETCH (CACHED)
-# --------------------------------------------------
 @st.cache_data(ttl=300)
 def fetch_image(url: str) -> bytes:
     r = requests.get(url, timeout=30)
     r.raise_for_status()
     return r.content
 
-# --------------------------------------------------
-# SHOW LAST IMAGE
-# --------------------------------------------------
 if st.session_state.last_image is not None:
     st.image(
         st.session_state.last_image,
@@ -152,9 +130,6 @@ if st.session_state.last_image is not None:
         use_container_width=True
     )
 
-# --------------------------------------------------
-# GENERATION
-# --------------------------------------------------
 if st.button("Generate Art 🚀", type="primary"):
 
     if st.session_state.is_generating:
